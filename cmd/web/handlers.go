@@ -7,7 +7,9 @@ import (
 	"github.com/skapskap/snippaws/pkg/models"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
+	"unicode/utf8"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -74,11 +76,45 @@ func (app *application) createSnippet(w http.ResponseWriter, r *http.Request) {
 	created := time.Now()
 	expiresValue := r.PostForm.Get("expires")
 
+	errors := make(map[string]string)
+
+	if expiresValue == "" {
+		errors["expires"] = "Este campo não pode ficar em branco"
+	}
+
 	expires, err := strconv.Atoi(expiresValue)
 	if err != nil {
 	}
 
 	expiresTime := time.Now().AddDate(0, 0, expires)
+
+	// Checar se o título do snippet tá em branco ou ultrapassa 100 caracteres
+
+	if strings.TrimSpace(title) == "" {
+		errors["title"] = "Este campo não pode ficar em branco."
+	} else if utf8.RuneCountInString(title) > 100 {
+		errors["title"] = "Limite de caracteres ultrapassado (100)"
+	}
+
+	// Checar se o conteúdo do snippet tá em branco
+
+	if strings.TrimSpace(content) == "" {
+		errors["content"] = "Este campo não pode ficar em branco"
+	}
+
+	// Checar se o campo de expiração não está em branco e se bate com um dos valores permitidos
+
+	if expires != 365 && expires != 7 && expires != 1 {
+		errors["expires"] = "Este campo é inválido"
+	}
+
+	if len(errors) > 0 {
+		app.render(w, r, "create.page.tmpl", &templateData{
+			FormErrors: errors,
+			FormData:   r.PostForm,
+		})
+		return
+	}
 
 	id, err := app.snippets.Insert(title, content, created, expiresTime.Format("2006-01-02 15:04:05"))
 	if err != nil {
