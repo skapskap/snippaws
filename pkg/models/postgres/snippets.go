@@ -11,7 +11,8 @@ type SnippetModel struct {
 	DB *sql.DB
 }
 
-func (m *SnippetModel) Insert(title, content string, created, expires time.Time) (int, error) {
+func (m *SnippetModel) Insert(title, content string, created time.Time, expires string) (int,
+	error) {
 	stmt := `INSERT INTO snippets (title, content, created, expires)
         VALUES($1, $2, $3, $4) RETURNING id`
 
