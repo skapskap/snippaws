@@ -1,19 +1,19 @@
 package main
 
 import (
+	"github.com/skapskap/snippaws/pkg/forms"
 	"github.com/skapskap/snippaws/pkg/models"
 	"html/template"
-	"net/url"
 	"path/filepath"
 	"time"
 )
 
 type templateData struct {
 	CurrentYear int
-	FormData    url.Values
-	FormErrors  map[string]string
+	Form        *forms.Form
 	Snippet     *models.Snippet
 	Snippets    []*models.Snippet
+	Flash       string
 }
 
 func humanDate(t time.Time) string {

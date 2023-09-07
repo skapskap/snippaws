@@ -4,14 +4,13 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/skapskap/snippaws/pkg/models"
-	"time"
 )
 
 type SnippetModel struct {
 	DB *sql.DB
 }
 
-func (m *SnippetModel) Insert(title, content string, created time.Time, expires string) (int,
+func (m *SnippetModel) Insert(title, content string, created, expires string) (int,
 	error) {
 	stmt := `INSERT INTO snippets (title, content, created, expires)
         VALUES($1, $2, $3, $4) RETURNING id`

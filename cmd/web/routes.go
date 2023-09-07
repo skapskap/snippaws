@@ -13,10 +13,10 @@ func (app *application) routes() http.Handler {
 	r.Use(app.logRequest)
 	r.Use(secureHeaders)
 
-	r.Get("/", http.HandlerFunc(app.home))
-	r.Get("/snippet/create", http.HandlerFunc(app.createSnippetForm))
-	r.Post("/snippet/create", http.HandlerFunc(app.createSnippet))
-	r.Get("/snippet/{id}", http.HandlerFunc(app.showSnippet))
+	r.With(app.session.Enable).Get("/", http.HandlerFunc(app.home))
+	r.With(app.session.Enable).Get("/snippet/create", http.HandlerFunc(app.createSnippetForm))
+	r.With(app.session.Enable).Post("/snippet/create", http.HandlerFunc(app.createSnippet))
+	r.With(app.session.Enable).Get("/snippet/{id}", http.HandlerFunc(app.showSnippet))
 
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 	r.Get("/static/*", func(w http.ResponseWriter, r *http.Request) {
