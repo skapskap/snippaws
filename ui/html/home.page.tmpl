@@ -1,14 +1,14 @@
 {{template "base" .}}
 
-{{define "title"}}Home{{end}}
+{{define "title"}}Início{{end}}
 
 {{define "main"}}
-    <h2>Latest Snippets</h2>
+    <h2>Últimos Snippets</h2>
     {{if .Snippets}}
     <table>
         <tr>
-            <th>Title</th>
-            <th>Created</th>
+            <th>Título</th>
+            <th>Criado</th>
             <th>ID</th>
         </tr>
         {{range .Snippets}}
@@ -20,6 +20,6 @@
         {{end}}
     </table>
     {{else}}
-        <p>There's nothing to see here... yet!</p>
+        <p>Nada pra ver aqui... ainda!</p>
     {{end}}
 {{end}}
