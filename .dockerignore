@@ -29,6 +29,3 @@ main
 *.exe
 *.test
 *.prof
-
-# Environment variables file (if you're using one)
-.env
