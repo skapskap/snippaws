@@ -24,12 +24,16 @@ type application struct {
 }
 
 func main() {
-	err := godotenv.Load("./app.env")
-	if err != nil {
-		log.Fatal("Error loading .env file:", err)
+	// Verifique se o arquivo .env existe
+	if _, err := os.Stat("./app.env"); err == nil {
+		// Se o arquivo .env existe, carregue as variáveis de ambiente a partir dele
+		err := godotenv.Load("./app.env")
+		if err != nil {
+			log.Fatal("Error loading .env file:", err)
+		}
 	}
 
-	addr := flag.String("addr", ":4000", "HTTP Network Address")
+	addr := flag.String("addr", ":8080", "HTTP Network Address")
 
 	secret := flag.String("secret", "s6Ndh+pPbnzHbS*+9Pk8qGWhTzbpa@ge", "Secret key")
 
